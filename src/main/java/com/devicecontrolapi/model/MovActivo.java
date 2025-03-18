@@ -14,7 +14,7 @@ public class MovActivo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idmov;
-    private Date fecha;
+    private Date fecha;  //Poner fechaDevol?
     private String descrimov;
     private char estado;
 
