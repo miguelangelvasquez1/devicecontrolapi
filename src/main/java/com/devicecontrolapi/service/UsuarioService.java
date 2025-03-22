@@ -21,7 +21,7 @@ public class UsuarioService {
     // Registrar un nuevo usuario
     public Usuario registrarUsuario(Usuario usuario) {
         // Encriptar la contraseña antes de guardarla
-        String encryptedPassword = passwordEncoder.encode(usuario.getClave());
+        String encryptedPassword = passwordEncoder.encode(usuario.getClave());//Instalar lombok si da error
         usuario.setClave(encryptedPassword);
         return usuarioRepository.save(usuario);
     }

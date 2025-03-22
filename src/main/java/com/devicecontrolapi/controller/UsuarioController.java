@@ -40,7 +40,7 @@ public class UsuarioController {
         return usuarioService.obtenerTodosLosUsuarios();
     }
 
-    // Obtener un usuario por su id
+    // Obtener un usuario por su id, OPCIONAL?
     @GetMapping("/{id}") //@GetMapping("/{id:\\d+}"), Evita conflicto con "/login" asegurando que ID solo acepte números
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Integer id) {
         Optional<Usuario> usuario = usuarioService.obtenerUsuarioPorId(id);

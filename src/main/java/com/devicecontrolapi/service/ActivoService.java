@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ActivoService {
@@ -29,5 +30,34 @@ public class ActivoService {
         return activoRepository.buscarPorEstadoYTipo(estado, idTipoActivo);
     }
 
-    // Puedes agregar otros métodos que necesites
+    // Método para agregar un activo
+    public Activo agregarActivo(Activo activo) {
+        return activoRepository.save(activo);
+    }
+
+    // Método para actualizar un activo, o hacer consulta de MYSQL
+    public Activo actualizarActivo(Integer id, Activo activoActualizado) {
+        Optional<Activo> activoExistente = activoRepository.findById(id);
+        if (activoExistente.isPresent()) {
+            Activo activo = activoExistente.get();
+            activo.setNombre(activoActualizado.getNombre());
+            activo.setEstado(activoActualizado.getEstado());
+            activo.setTipoActivo(activoActualizado.getTipoActivo());
+            // Aquí puedes agregar más campos si lo necesitas.
+            return activoRepository.save(activo);
+        } else {
+            return null;  // O lanzar una excepción si no se encuentra el activo
+        }
+    }
+
+    // Método para eliminar un activo
+    public boolean eliminarActivo(Integer id) {
+        Optional<Activo> activoExistente = activoRepository.findById(id);
+        if (activoExistente.isPresent()) {
+            activoRepository.deleteById(id);
+            return true;
+        } else {
+            return false;  // O lanzar una excepción si no se encuentra el activo
+        }
+    }
 }

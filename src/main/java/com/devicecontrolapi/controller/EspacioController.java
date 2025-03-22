@@ -21,7 +21,7 @@ public class EspacioController {
         return espacioService.obtenerTodosLosEspacios();
     }
 
-    // Obtener un espacio por ID
+    // Obtener un espacio por ID, OPCIONAL?
     @GetMapping("/{id}")
     public Optional<Espacio> obtenerEspacioPorId(@PathVariable Integer id) {
         return espacioService.obtenerEspacioPorId(id);
