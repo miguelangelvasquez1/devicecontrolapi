@@ -4,6 +4,7 @@ import com.devicecontrolapi.dto.LoginRequest;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,11 @@ public class UsuarioController {
 
     // Endpoint para registrar un nuevo usuario
     @PostMapping("/register")
-    public ResponseEntity<Usuario> registrarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<Object> registrarUsuario(@RequestBody Usuario usuario) {
+
+        if (usuarioService.existsByEmail(usuario.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El correo electrónico ya está registrado.");
+        }
         Usuario nuevoUsuario = usuarioService.registrarUsuario(usuario);
         return ResponseEntity.ok(nuevoUsuario);
     }

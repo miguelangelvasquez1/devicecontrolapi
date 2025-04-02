@@ -18,4 +18,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     // Buscar usuarios por nombre (con búsqueda parcial)
     List<Usuario> findByNombreContaining(String nombre);
+
+    boolean existsByEmail(String email);
 }
