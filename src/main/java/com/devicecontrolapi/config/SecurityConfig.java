@@ -23,22 +23,20 @@ public class SecurityConfig {
     }
 
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // Desactiva la protección CSRF (útil para APIs)
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((authz) ->
+
+                // Permite todas las solicitudes sin autenticación
+                .authorizeHttpRequests(authz ->
                         authz.anyRequest().permitAll()
-                )
-                .httpBasic(withDefaults())
-                .formLogin((form) ->
-                        form.loginPage("/login").permitAll()
-                )
-                .logout((logout) -> logout.permitAll());
+                );
 
         return http.build();
     }
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {

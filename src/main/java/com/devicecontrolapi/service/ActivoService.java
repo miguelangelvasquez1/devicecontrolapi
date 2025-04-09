@@ -15,6 +15,10 @@ public class ActivoService {
     @Autowired
     private ActivoRepository activoRepository;
 
+    public List<Activo> findAll () {
+        return activoRepository.findAll();
+    }
+
     // Método para contar los activos por tipo
     public long contarActivosPorTipo(Integer idTipoActivo) {
         return activoRepository.countActivosPorTipo(idTipoActivo);

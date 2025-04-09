@@ -7,12 +7,14 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 //Verificacion del token en cada solicitud
-@WebFilter("/user/*") // Aplica a las rutas que comienzan con "/user/"
+@WebFilter("/activos/*") // Aplica a las rutas que comienzan con "/user/"
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private static final Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.getName());
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -29,6 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 String email = jwtUtil.extractUsername(token);
                 if (jwtUtil.validateToken(token, email)) {
+                    System.out.println("hola");
+                    logger.info("Hola----------------------------------------------");
                     // El token es válido, se puede continuar con la solicitud
                     // Puedes establecer la autenticación en el contexto de seguridad aquí si es necesario
                 } else {

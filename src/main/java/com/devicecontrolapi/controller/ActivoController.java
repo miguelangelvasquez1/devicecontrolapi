@@ -15,6 +15,11 @@ public class ActivoController {
     @Autowired
     private ActivoService activoService;
 
+    @GetMapping("/findAll")
+    public List<Activo> findAll () {
+        return activoService.findAll();
+    }
+
     // Endpoint para contar los activos por tipo
     @GetMapping("/contar/{idTipoActivo}")
     public long contarActivosPorTipo(@PathVariable Integer idTipoActivo) {
@@ -28,7 +33,7 @@ public class ActivoController {
     }
 
     // Endpoint para buscar activos por estado y tipo
-        @GetMapping("/buscarPorEstadoYTipo")
+    @GetMapping("/buscarPorEstadoYTipo")
     public List<Activo> buscarActivosPorEstadoYTipo(
             @RequestParam char estado, @RequestParam Integer idTipoActivo) {
         return activoService.buscarActivosPorEstadoYTipo(estado, idTipoActivo);

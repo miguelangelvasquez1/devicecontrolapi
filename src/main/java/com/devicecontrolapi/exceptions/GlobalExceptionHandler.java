@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
         if (ex.getCause() instanceof SQLException) {
             SQLException sqlEx = (SQLException) ex.getCause();
             if (sqlEx.getErrorCode() == 1062) { // 1062 es el código de error de MySQL para "Duplicate entry"
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El correo electrónico ya está registrado.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Entrada duplicada.");
             }
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error en el servidor.");
