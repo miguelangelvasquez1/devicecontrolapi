@@ -30,8 +30,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 // Permite todas las solicitudes sin autenticación
-                .authorizeHttpRequests(authz ->
-                        authz.anyRequest().permitAll()
+                .authorizeHttpRequests(requests ->
+                        requests
+                                .requestMatchers("/usuarios/login", "/cron").permitAll()
+                                .anyRequest().authenticated()
                 );
 
         return http.build();

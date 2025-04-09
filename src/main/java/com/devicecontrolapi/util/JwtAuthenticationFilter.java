@@ -1,5 +1,7 @@
 package com.devicecontrolapi.util;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,6 +9,7 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 //Verificacion del token en cada solicitud
@@ -31,17 +34,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 String email = jwtUtil.extractUsername(token);
                 if (jwtUtil.validateToken(token, email)) {
-                    System.out.println("hola");
-                    logger.info("Hola----------------------------------------------");
-                    // El token es válido, se puede continuar con la solicitud
-                    // Puedes establecer la autenticación en el contexto de seguridad aquí si es necesario
+                    // Establece autenticación en el contexto de seguridad
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            email, null, Collections.emptyList());
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // Token inválido
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().write("Token no válido o expirado");
                     return;
                 }
             } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // Token inválido
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token no válido o expirado");
                 return;
             }
@@ -49,4 +53,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
 }
