@@ -13,7 +13,7 @@ public class Activo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idactivo;
     private String nombre;
-    private String codigoqr;
+    private String url;
     private String serial;
     private char estado;
 

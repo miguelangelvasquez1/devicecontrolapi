@@ -4,24 +4,28 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
-    // Clave secreta para firmar el JWT (puedes moverla a tu archivo de configuración)
-    private SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    private static final String SECRET_KEY_STRING = "mi-clave-secreta-super-segura-que-no-cambie";
+    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes(StandardCharsets.UTF_8));
 
     // Método para generar el JWT
     public String generateToken(String email, byte rol) {
         long expirationTime = 1000 * 60 * 60;  // 1 hora de expiración
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(email) //El subject será el email
                 .claim("rol", rol)
-                .setIssuedAt(new Date())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(secretKey)  // Firma con la clave generada
+                .signWith(SECRET_KEY)  // Firma con la clave generada
                 .compact();
     }
 
@@ -33,9 +37,10 @@ public class JwtUtil {
 
     // Método para extraer los claims del JWT
     private Claims extractClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey) // Clave secreta
-                .parseClaimsJws(token) // Parsear el JWT
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(token)
                 .getBody();
     }
 

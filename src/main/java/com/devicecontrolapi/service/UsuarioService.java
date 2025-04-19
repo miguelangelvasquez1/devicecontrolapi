@@ -3,6 +3,7 @@ package com.devicecontrolapi.service;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.repository.UsuarioRepository;
 import com.devicecontrolapi.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,12 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private final JwtUtil jwtUtil = new JwtUtil();
+    private final JwtUtil jwtUtil;
 
     // Encriptar la contraseña usando BCrypt
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
