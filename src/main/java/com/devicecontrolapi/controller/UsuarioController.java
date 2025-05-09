@@ -1,5 +1,6 @@
 package com.devicecontrolapi.controller;
 
+import com.devicecontrolapi.communication.RegisterConfirmation;
 import com.devicecontrolapi.dto.LoginRequest;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.service.UsuarioService;
@@ -18,6 +19,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private RegisterConfirmation registerConfirmation;
+
     // Endpoint para registrar un nuevo usuario
     @PostMapping("/register")
     public ResponseEntity<Object> registrarUsuario(@RequestBody Usuario usuario) {
@@ -26,6 +30,7 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El correo electrónico ya está registrado.");
         }
         Usuario nuevoUsuario = usuarioService.registrarUsuario(usuario);
+        registerConfirmation.realizarLlamadaHttp(usuario.getEmail(), usuario.getNombre(), usuario.rolNumberToString());
         return ResponseEntity.ok(nuevoUsuario);
     }
 

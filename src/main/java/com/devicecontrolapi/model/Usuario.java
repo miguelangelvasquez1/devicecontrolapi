@@ -17,4 +17,17 @@ public class Usuario {
     private String clave;
     private String telefono;
     private Byte rol;
+
+    public String rolNumberToString() {
+        switch (rol) {
+            case 1:
+                return "Vigilante";
+            case 2:
+                return "Instructor";
+            case 3:
+                return "Almacén";
+            default:
+                return "Desconocido";
+        }
+    }
 }
