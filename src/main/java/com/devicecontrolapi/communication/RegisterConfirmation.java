@@ -31,7 +31,7 @@ public class RegisterConfirmation {
             + "\"to\": \"" + email +"\","
             + "\"dataTemplate\": {"
             + "    \"nombre\": \"" + nombre + "\","
-            + "    \"rol\": \"" + rol + "\""
+            + "    \"role\": \"" + rol + "\""
             + "},"
             + "\"templateName\": \"" + plantilla + "\""
             + "}";

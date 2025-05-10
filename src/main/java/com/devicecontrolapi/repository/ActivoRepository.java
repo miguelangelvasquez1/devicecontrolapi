@@ -1,17 +1,20 @@
 package com.devicecontrolapi.repository;
 
 import com.devicecontrolapi.model.Activo;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+
 
 public interface ActivoRepository extends JpaRepository<Activo, Integer> {
 
     //Consultas CRUD se hacen automáticamente
 
-    List<Activo> findAll(); //Redundante?
+    List<Activo> findAll(); //Redundante?, solo definirlo en service y controller
 
     // Contar activos por tipo usando JPQL
     @Query("SELECT COUNT(a) FROM Activo a WHERE a.tipoActivo.id = :idTipoActivo")
