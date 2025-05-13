@@ -12,7 +12,7 @@ public class PasswordResetService {
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
 
-    public String generateResetCode(String email) {
+    public String generateResetCode(String email) { //Genera y guarda el token de restablecimiento
         // Elimina cualquier código anterior
         tokenRepository.deleteByEmail(email);
 
@@ -26,7 +26,7 @@ public class PasswordResetService {
         return code;
     }
 
-    public boolean validateResetCode(String email, String code) {
+    public boolean validateResetCode(String email, String code) { //Cuando pongo el código en la página
         return tokenRepository.findByEmailAndCode(email, code)
                 .filter(token -> token.getExpiration().isAfter(LocalDateTime.now()))
                 .isPresent();

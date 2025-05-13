@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,7 +20,7 @@ public class PasswordResetSender {
         this.restTemplate = restTemplate;
     }
 
-    public void sendResetCode(String to, String code) {
+    public void sendResetCode(String to, String username, String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -31,7 +29,7 @@ public class PasswordResetSender {
         payload.put("templateName", "template_password_reset.html");
 
         Map<String, String> data = new HashMap<>();
-        data.put("username", to);
+        data.put("username", username);
         data.put("resetCode", code);
 
         payload.put("dataTemplate", data);
@@ -39,17 +37,7 @@ public class PasswordResetSender {
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
-        String azureFunctionUrl = "https://<TU-AZURE-FUNCTION-URL>";
+        String azureFunctionUrl = "https://function-192-adso.azurewebsites.net/api/httptrigger1";
         restTemplate.postForEntity(azureFunctionUrl, request, String.class);
     }
-
-    @Configuration
-    public class RestTemplateConfig {
-
-        @Bean
-        public RestTemplate restTemplate() {
-            return new RestTemplate();
-        }
-    }
-
 }

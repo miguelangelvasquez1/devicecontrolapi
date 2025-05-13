@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devicecontrolapi.communication.PasswordResetSender;
+import com.devicecontrolapi.dto.EmailPasswordResetRequest;
 import com.devicecontrolapi.dto.PasswordResetRequest;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.repository.UsuarioRepository;
@@ -34,21 +35,24 @@ public class PasswordResetController {
     @Autowired
     private PasswordResetSender passwordResetSender; // Llama a tu Azure Function
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
+    @PostMapping("/forgot-password") //Enviar email para restablecer contraseña
+    public ResponseEntity<?> forgotPassword(@RequestBody EmailPasswordResetRequest request) {
+        String email = request.getEmail();
+        String username = request.getName();
 
-        // TODO: Verifica si el email existe en tu base de datos de usuarios
+        if (!usuarioRepository.existsByEmail(email)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Correo no registrado");
+        }
 
         String code = passwordResetService.generateResetCode(email);
 
         // Enviar correo usando Azure Function
-        passwordResetSender.sendResetCode(email, code);
+        passwordResetSender.sendResetCode(email, username, code);
 
         return ResponseEntity.ok("Código de verificación enviado al correo.");
     }
 
-    @PostMapping("/verify-code")
+    @PostMapping("/verify-code") //Verificar si el código es correcto
     public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         String code = request.get("code");
@@ -60,11 +64,11 @@ public class PasswordResetController {
         return ResponseEntity.ok("Código válido, procede a restablecer tu contraseña.");
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/reset-password") //Para cambiar la contraseña
     public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest request) {
         if (!passwordResetService.validateResetCode(request.getEmail(), request.getCode())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Código inválido o expirado");
-        }
+        } //Verifica de nuevo el código
 
         Usuario user = usuarioRepository.findByEmail(request.getEmail());
                 // .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
