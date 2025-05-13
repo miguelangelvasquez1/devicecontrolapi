@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class PasswordResetSender {
+public class PasswordResetSender { //Solucionar error con la base de datos, tabla token, el email de registro ya no sirve
 
     private final RestTemplate restTemplate;
 
@@ -26,7 +26,7 @@ public class PasswordResetSender {
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("subject", "Restablece tu contraseña");
-        payload.put("templateName", "template_password_reset.html");
+        payload.put("templateName", "passwordResetDC.html");
 
         Map<String, String> data = new HashMap<>();
         data.put("username", username);

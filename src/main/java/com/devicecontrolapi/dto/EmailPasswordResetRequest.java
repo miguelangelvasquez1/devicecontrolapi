@@ -9,4 +9,8 @@ public class EmailPasswordResetRequest { //Para enviar el email de recuperación
 
     private String email;
     private String name;
+
+    public EmailPasswordResetRequest() {
+        
+    }
 }
