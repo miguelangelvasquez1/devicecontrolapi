@@ -14,7 +14,7 @@ public interface ActivoRepository extends JpaRepository<Activo, Integer> {
 
     //Consultas CRUD se hacen automáticamente
 
-    List<Activo> findAll(); //Redundante?, solo definirlo en service y controller
+    // List<Activo> findAll(); //Redundante?, solo definirlo en service y controller
 
     // Contar activos por tipo usando JPQL
     @Query("SELECT COUNT(a) FROM Activo a WHERE a.tipoActivo.id = :idTipoActivo")
