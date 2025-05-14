@@ -48,7 +48,7 @@ public class PasswordResetController {
         String code = passwordResetService.generateResetCode(email);
 
         // Enviar correo usando Azure Function
-        passwordResetSender.sendResetCode(email, username, code);
+        passwordResetSender.sendResetCode(email, username, code); //Esto puede no enviarse, mostrar mensaje en el front
 
         return ResponseEntity.ok("Código de verificación enviado al correo.");
     }
