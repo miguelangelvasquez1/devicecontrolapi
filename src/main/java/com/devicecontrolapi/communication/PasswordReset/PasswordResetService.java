@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PasswordResetService {
@@ -12,6 +13,7 @@ public class PasswordResetService {
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
 
+    @Transactional //Por el delete
     public String generateResetCode(String email) { //Genera y guarda el token de restablecimiento
         // Elimina cualquier código anterior
         tokenRepository.deleteByEmail(email);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class PasswordResetController {
         String code = passwordResetService.generateResetCode(email);
 
         // Enviar correo usando Azure Function
-        passwordResetSender.sendResetCode(email, username, code);
+        passwordResetSender.sendResetCode(email, username, code); //Esto puede no enviarse, mostrar mensaje en el front
 
         return ResponseEntity.ok("Código de verificación enviado al correo.");
     }
@@ -64,6 +65,7 @@ public class PasswordResetController {
         return ResponseEntity.ok("Código válido, procede a restablecer tu contraseña.");
     }
 
+    @Transactional //Por el delete del token
     @PostMapping("/reset-password") //Para cambiar la contraseña
     public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest request) {
         if (!passwordResetService.validateResetCode(request.getEmail(), request.getCode())) {
@@ -74,7 +76,7 @@ public class PasswordResetController {
                 // .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         user.setClave(passwordEncoder.encode(request.getNewPassword()));
-        usuarioRepository.save(user);
+        usuarioRepository.save(user); //Sobreescribe el usuario con la nueva contraseña
 
         tokenRepository.deleteByEmail(request.getEmail());
 

@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
 
-        } catch (TokenMissingException | InvalidTokenException e) { //Esto manda las excepciones a JwtAutthenticationEntry
+        } catch (TokenMissingException | InvalidTokenException e) { //Esto manda las excepciones a JwtAutthenticationEntryPoint
             SecurityContextHolder.clearContext();
             request.setAttribute("exception", e);
             authenticationEntryPoint.commence(request, response,

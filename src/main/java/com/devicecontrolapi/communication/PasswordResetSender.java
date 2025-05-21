@@ -6,11 +6,12 @@ import java.util.Map;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class PasswordResetSender { //Solucionar error con la base de datos, tabla token, el email de registro ya no sirve
+public class PasswordResetSender {
 
     private final RestTemplate restTemplate;
 
@@ -18,6 +19,7 @@ public class PasswordResetSender { //Solucionar error con la base de datos, tabl
         this.restTemplate = restTemplate;
     }
 
+    @Async
     public void sendResetCode(String to, String username, String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
