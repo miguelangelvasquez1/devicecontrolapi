@@ -1,5 +1,6 @@
 package com.devicecontrolapi.service;
 
+import com.devicecontrolapi.dto.LoginResponseDTO;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.repository.UsuarioRepository;
 import com.devicecontrolapi.util.JwtUtil;
@@ -40,12 +41,18 @@ public class UsuarioService {
         return false; // Usuario no encontrado
     }
     //Primero verifico que el correo y la contraseña sean correctos
-    public String loginAndGenerateToken(String email, String clave) {
+    public LoginResponseDTO loginAndGenerateToken(String email, String clave) {
         boolean autenticado = verificarLogin(email, clave);
         if (autenticado) {
             Usuario usuario = usuarioRepository.findByEmail(email);
-            // Generar JWT con email y rol, si el usuario es válido
-            return jwtUtil.generateToken(email, usuario.getRol());
+
+            // Generar JWT con email y rol
+            String token = jwtUtil.generateToken(email, usuario.getRol());
+
+            // Crear y retornar el DTO con el token
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+            loginResponseDTO.setToken(token);
+            return loginResponseDTO;
         } else {
             return null; // Login fallido
         }

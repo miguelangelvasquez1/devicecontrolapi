@@ -3,7 +3,6 @@ package com.devicecontrolapi.communication;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,7 +14,6 @@ public class PasswordResetSender { //Solucionar error con la base de datos, tabl
 
     private final RestTemplate restTemplate;
 
-    @Autowired
     public PasswordResetSender(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }

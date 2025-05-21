@@ -2,6 +2,7 @@ package com.devicecontrolapi.controller;
 
 import com.devicecontrolapi.communication.RegisterConfirmation;
 import com.devicecontrolapi.dto.LoginRequest;
+import com.devicecontrolapi.dto.LoginResponseDTO;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +36,20 @@ public class UsuarioController {
     }
 
     // Endpoint para hacer login y obtener el token JWT - Cambiar a clase loginRequest?
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        String token = usuarioService.loginAndGenerateToken(loginRequest.getEmail(), loginRequest.getClave());
+@PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    LoginResponseDTO response = usuarioService.loginAndGenerateToken(
+        loginRequest.getEmail(), loginRequest.getClave());
 
-        if (token != null) {
-            // Si el login es exitoso, enviar el token como respuesta
-            return ResponseEntity.ok(token);
-        } else {
-            // Si las credenciales son incorrectas
-            return ResponseEntity.status(401).body("Credenciales incorrectas");
-        }
+    if (response != null) {
+        // Si el login es exitoso, enviar el DTO con el token
+        return ResponseEntity.ok(response);
+    } else {
+        // Si las credenciales son incorrectas
+        return ResponseEntity.status(401).body("Credenciales incorrectas");
     }
+}
+
 
     // Obtener todos los usuarios
     @GetMapping
