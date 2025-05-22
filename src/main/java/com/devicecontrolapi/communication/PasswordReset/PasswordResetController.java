@@ -62,6 +62,7 @@ public class PasswordResetController {
         if (!valid)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Código inválido o expirado");
 
+        //Eliminar token?
         return ResponseEntity.ok("Código válido, procede a restablecer tu contraseña.");
     }
 

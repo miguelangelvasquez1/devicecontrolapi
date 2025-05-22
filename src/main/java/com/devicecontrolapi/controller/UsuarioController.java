@@ -35,21 +35,21 @@ public class UsuarioController {
         return ResponseEntity.ok(nuevoUsuario);
     }
 
-    // Endpoint para hacer login y obtener el token JWT - Cambiar a clase loginRequest?
-@PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-    LoginResponseDTO response = usuarioService.loginAndGenerateToken(
-        loginRequest.getEmail(), loginRequest.getClave());
+    // Endpoint para hacer login y obtener el token JWT - Cambiar a clase
+    // loginRequest?
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        LoginResponseDTO response = usuarioService.loginAndGenerateToken(
+                loginRequest.getEmail(), loginRequest.getClave());
 
-    if (response != null) {
-        // Si el login es exitoso, enviar el DTO con el token
-        return ResponseEntity.ok(response);
-    } else {
-        // Si las credenciales son incorrectas
-        return ResponseEntity.status(401).body("Credenciales incorrectas");
+        if (response != null) {
+            // Si el login es exitoso, enviar el DTO con el token
+            return ResponseEntity.ok(response);
+        } else {
+            // Si las credenciales son incorrectas
+            return ResponseEntity.status(401).body("Credenciales incorrectas");
+        }
     }
-}
-
 
     // Obtener todos los usuarios
     @GetMapping
@@ -58,7 +58,8 @@ public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
     }
 
     // Obtener un usuario por su id, OPCIONAL?
-    @GetMapping("/getById/{id:\\d+}") //@GetMapping("/{id:\\d+}"), Evita conflicto con "/login" asegurando que ID solo acepte números
+    @GetMapping("/getById/{id:\\d+}") // @GetMapping("/{id:\\d+}"), Evita conflicto con "/login" asegurando que ID
+                                      // solo acepte números
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Integer id) {
         Optional<Usuario> usuario = usuarioService.obtenerUsuarioPorId(id);
         return usuario.map(ResponseEntity::ok)
