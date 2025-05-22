@@ -15,7 +15,7 @@ public class ActivoController {
     @Autowired
     private ActivoService activoService;
 
-    @GetMapping("/findAll")
+    @GetMapping()
     public List<Activo> findAll () {
         return activoService.findAll();
     }

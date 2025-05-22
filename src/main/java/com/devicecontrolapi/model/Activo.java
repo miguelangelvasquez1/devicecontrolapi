@@ -16,6 +16,7 @@ public class Activo {
     private String url;
     private String serial;
     private char estado;
+    private String observaciones; //Se añade despues de la version 1.0.0
 
     @ManyToOne
     @JoinColumn(name = "idespacio")
