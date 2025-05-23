@@ -25,4 +25,19 @@ public class Activo {
     @ManyToOne
     @JoinColumn(name = "idtipoact")
     private TipoActivo tipoActivo;
+
+    // interface Activo {
+//   id: number;
+//   codigo: string;
+//   nombre: string;
+//   tipo: string;
+//   subtipo: string;
+//   estado: 'Disponible' | 'Ocupado' | 'Mantenimiento';
+//   ambienteAsignado?: string;
+//   marca?: string;
+//   modelo?: string;
+//   codigoInterno?: string;
+//   serial?: string;
+//   observaciones?: string;
+// }
 }
