@@ -40,7 +40,7 @@ public class ActivoController {
     }
 
     // Endpoint para agregar un activo
-    @PostMapping("/agregar")
+    @PostMapping()
     public Activo agregarActivo(@RequestBody Activo activo) {
         return activoService.agregarActivo(activo);
     }
