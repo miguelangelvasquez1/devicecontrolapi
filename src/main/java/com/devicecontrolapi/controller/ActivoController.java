@@ -47,7 +47,7 @@ public class ActivoController {
 
     // Endpoint para actualizar un activo
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<Activo> actualizarActivo(@PathVariable Integer id, @RequestBody Activo activo) {
+    public ResponseEntity<Activo> actualizarActivo(@PathVariable("id") Integer id, @RequestBody Activo activo) {
         Activo activoActualizado = activoService.actualizarActivo(id, activo);
         if (activoActualizado != null) {
             return ResponseEntity.ok(activoActualizado);
@@ -58,7 +58,7 @@ public class ActivoController {
 
     // Endpoint para eliminar un activo
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Void> eliminarActivo(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminarActivo(@PathVariable("id") Integer id) {
         boolean eliminado = activoService.eliminarActivo(id);
         if (eliminado) {
             return ResponseEntity.noContent().build();

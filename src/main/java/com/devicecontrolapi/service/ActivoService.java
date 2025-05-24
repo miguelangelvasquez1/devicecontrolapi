@@ -15,7 +15,7 @@ public class ActivoService {
     @Autowired
     private ActivoRepository activoRepository;
 
-    public List<Activo> findAll () {
+    public List<Activo> findAll() {
         return activoRepository.findAll();
     }
 
@@ -42,15 +42,23 @@ public class ActivoService {
     // Método para actualizar un activo, o hacer consulta de MYSQL
     public Activo actualizarActivo(Integer id, Activo activoActualizado) {
         Optional<Activo> activoExistente = activoRepository.findById(id);
+
         if (activoExistente.isPresent()) {
             Activo activo = activoExistente.get();
+
+            // Actualizar todos los campos relevantes
             activo.setNombre(activoActualizado.getNombre());
             activo.setEstado(activoActualizado.getEstado());
             activo.setTipoActivo(activoActualizado.getTipoActivo());
-            // Aquí puedes agregar más campos si lo necesitas.
+            activo.setEspacio(activoActualizado.getEspacio());
+            activo.setUrl(activoActualizado.getUrl());
+            activo.setSerial(activoActualizado.getSerial());
+            activo.setObservaciones(activoActualizado.getObservaciones());
+
             return activoRepository.save(activo);
         } else {
-            return null;  // O lanzar una excepción si no se encuentra el activo
+            // Puedes lanzar una excepción personalizada si prefieres
+            return null;
         }
     }
 
@@ -61,7 +69,7 @@ public class ActivoService {
             activoRepository.deleteById(id);
             return true;
         } else {
-            return false;  // O lanzar una excepción si no se encuentra el activo
+            return false; // O lanzar una excepción si no se encuentra el activo
         }
     }
 }
