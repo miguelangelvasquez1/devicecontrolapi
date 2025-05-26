@@ -27,7 +27,7 @@ public class UsuarioService {
     // Registrar un nuevo usuario
     public Usuario registrarUsuario(Usuario usuario) {
         // Encriptar la contraseña antes de guardarla
-        String encryptedPassword = passwordEncoder.encode(usuario.getClave());//Instalar lombok si da error
+        String encryptedPassword = passwordEncoder.encode(usuario.getClave());// Instalar lombok si da error
         usuario.setClave(encryptedPassword);
         return usuarioRepository.save(usuario);
     }
@@ -40,21 +40,27 @@ public class UsuarioService {
         }
         return false; // Usuario no encontrado
     }
-    //Primero verifico que el correo y la contraseña sean correctos
+
+    // Primero verifico que el correo y la contraseña sean correctos
     public LoginResponseDTO loginAndGenerateToken(String email, String clave) {
         boolean autenticado = verificarLogin(email, clave);
         if (autenticado) {
             Usuario usuario = usuarioRepository.findByEmail(email);
 
-            // Generar JWT con email y rol
+            // Generar JWT
             String token = jwtUtil.generateToken(email, usuario.getRol());
 
-            // Crear y retornar el DTO con el token
+            // Crear respuesta
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
             loginResponseDTO.setToken(token);
+            loginResponseDTO.setNombre(usuario.getNombre());
+            loginResponseDTO.setEmail(usuario.getEmail());
+            loginResponseDTO.setRol(usuario.getRol());
+            loginResponseDTO.setTelefono(usuario.getTelefono());
+
             return loginResponseDTO;
         } else {
-            return null; // Login fallido
+            return null; // o lanza una excepción adecuada
         }
     }
 
