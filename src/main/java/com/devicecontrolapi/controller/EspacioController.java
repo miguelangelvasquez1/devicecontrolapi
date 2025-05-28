@@ -3,6 +3,7 @@ package com.devicecontrolapi.controller;
 import com.devicecontrolapi.model.Espacio;
 import com.devicecontrolapi.service.EspacioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class EspacioController {
         return espacioService.obtenerTodosLosEspacios();
     }
 
-    // Obtener un espacio por ID, OPCIONAL?
+    // Obtener un espacio por ID
     @GetMapping("/{id}")
     public Optional<Espacio> obtenerEspacioPorId(@PathVariable Integer id) {
         return espacioService.obtenerEspacioPorId(id);
@@ -39,15 +40,24 @@ public class EspacioController {
         return espacioService.contarEspacios();
     }
 
-    // Crear o actualizar un espacio
+    // Crear un nuevo espacio
     @PostMapping
-    public Espacio guardarEspacio(@RequestBody Espacio espacio) {
-        return espacioService.guardarEspacio(espacio);
+    public ResponseEntity<Espacio> crearEspacio(@RequestBody Espacio espacio) {
+        Espacio nuevoEspacio = espacioService.crearEspacio(espacio);
+        return ResponseEntity.ok(nuevoEspacio);
+    }
+
+    // Actualizar un espacio existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Espacio> actualizarEspacio(@PathVariable("id") Integer id, @RequestBody Espacio espacio) {
+        Espacio espacioActualizado = espacioService.actualizarEspacio(id, espacio);
+        return ResponseEntity.ok(espacioActualizado);
     }
 
     // Eliminar un espacio por ID
     @DeleteMapping("/{id}")
-    public void eliminarEspacio(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminarEspacio(@PathVariable("id") Integer id) {
         espacioService.eliminarEspacio(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,17 +1,20 @@
-package com.devicecontrolapi.model;
+    package com.devicecontrolapi.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+    import jakarta.persistence.*;
+    import lombok.*;
 
-@Entity
-@Table(name = "espacios")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Espacio {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idespacio;
-    private String nombre;
-    private String descripcion;
-}
+    @Entity
+    @Table(name = "espacios")
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class Espacio {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Integer idespacio;
+        private String nombre;
+        private String descripcion;
+        private String estado;
+        private Byte capacidad;
+        private Integer eliminado;
+    }
