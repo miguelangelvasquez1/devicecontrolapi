@@ -28,4 +28,22 @@ public interface EspacioRepository extends JpaRepository<Espacio, Integer> {
     List<Espacio> findAllByEliminado(Integer eliminado);
 
     Optional<Espacio> findByIdespacioAndEliminado(Integer idespacio, Integer eliminado);
+
+    // Buscar espacios por estado y no eliminados
+    List<Espacio> findByEstadoAndEliminado(String estado, Integer eliminado);
+    
+    // Buscar solo espacios activos (no eliminados)
+    List<Espacio> findByEliminado(Integer eliminado);
+    
+    // Contar espacios por estado
+    @Query("SELECT e.estado, COUNT(e) FROM Espacio e WHERE e.eliminado = 0 OR e.eliminado IS NULL GROUP BY e.estado")
+    List<Object[]> countByEstado();
+    
+    // Obtener capacidad total
+    @Query("SELECT SUM(e.capacidad) FROM Espacio e WHERE e.eliminado = 0 OR e.eliminado IS NULL")
+    Integer getTotalCapacidad();
+    
+    // Obtener los espacios con mayor capacidad
+    @Query("SELECT e FROM Espacio e WHERE (e.eliminado = 0 OR e.eliminado IS NULL) AND e.capacidad IS NOT NULL ORDER BY e.capacidad DESC")
+    List<Espacio> findTopByCapacidad();
 }
