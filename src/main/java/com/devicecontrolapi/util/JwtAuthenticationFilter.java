@@ -3,6 +3,8 @@ package com.devicecontrolapi.util;
 import com.devicecontrolapi.config.PublicRoutes;
 import com.devicecontrolapi.exceptions.InvalidTokenException;
 import com.devicecontrolapi.exceptions.TokenMissingException;
+
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,8 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain)
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
         // Verifica si la ruta está en las rutas públicas
@@ -45,29 +47,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new TokenMissingException(); //Si no hay token o esta mal escrito, etc
+                throw new TokenMissingException(); // Si no hay token o esta mal escrito, etc
             }
 
             final String jwtToken = authHeader.substring(7);
             final String emailSubject = jwtUtil.extractUsername(jwtToken);
 
             if (emailSubject == null || !jwtUtil.validateToken(jwtToken, emailSubject)) {
-                throw new InvalidTokenException(); //Si el token no es válido
+                throw new InvalidTokenException(); // Si el token no es válido
             }
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    emailSubject, null, Collections.emptyList()
-            );
+                    emailSubject, null, Collections.emptyList());
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
 
             filterChain.doFilter(request, response);
 
-        } catch (TokenMissingException | InvalidTokenException e) { //Esto manda las excepciones a JwtAutthenticationEntryPoint
+        } catch (ExpiredJwtException e) {
             SecurityContextHolder.clearContext();
             request.setAttribute("exception", e);
             authenticationEntryPoint.commence(request, response,
-                    new org.springframework.security.core.AuthenticationException(e.getMessage(), e) {});
+                    new org.springframework.security.core.AuthenticationException("Token expirado, haga la renovación eche", e) {
+                    });
+        } catch (TokenMissingException | InvalidTokenException e) {
+            SecurityContextHolder.clearContext();
+            request.setAttribute("exception", e);
+            authenticationEntryPoint.commence(request, response,
+                    new org.springframework.security.core.AuthenticationException(e.getMessage(), e) {
+                    });
         }
     }
 }
