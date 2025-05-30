@@ -8,8 +8,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class DevicecontrolapiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DevicecontrolapiApplication.class, args);
-	}
+    public static void main(String[] args) {
+
+        SpringApplication.run(DevicecontrolapiApplication.class, args);
+
+    }
 
 }
