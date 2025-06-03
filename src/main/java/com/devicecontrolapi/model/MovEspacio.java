@@ -19,7 +19,7 @@ public class MovEspacio {
     private Integer idmov;
     private LocalDateTime fechaPres;
     private LocalDateTime fechaDevol;
-    private char estado;
+    private String estado;
 
     @ManyToOne
     @JoinColumn(name = "idespacio")

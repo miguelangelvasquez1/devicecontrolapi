@@ -52,6 +52,7 @@ public class UsuarioService {
 
             // Crear respuesta
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+            loginResponseDTO.setIdusuario(usuario.getIdusuario());  
             loginResponseDTO.setToken(token);
             loginResponseDTO.setNombre(usuario.getNombre());
             loginResponseDTO.setEmail(usuario.getEmail());
