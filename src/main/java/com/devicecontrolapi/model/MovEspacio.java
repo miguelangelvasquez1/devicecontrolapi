@@ -17,9 +17,11 @@ public class MovEspacio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idmov;
+    private LocalDateTime fechaSolicitud;
     private LocalDateTime fechaPres;
     private LocalDateTime fechaDevol;
     private String estado;
+    private String motivo;  
 
     @ManyToOne
     @JoinColumn(name = "idespacio")
