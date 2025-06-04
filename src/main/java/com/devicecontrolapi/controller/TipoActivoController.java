@@ -3,6 +3,7 @@ package com.devicecontrolapi.controller;
 import com.devicecontrolapi.model.TipoActivo;
 import com.devicecontrolapi.service.TipoActivoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,7 +54,9 @@ public class TipoActivoController {
 
     // Eliminar un tipo de activo por ID
     @DeleteMapping("/{id}")
-    public void eliminarTipoActivo(@PathVariable Integer id) {
+    public ResponseEntity<String> eliminarTipoActivo(@PathVariable Integer id) {
         tipoActivoService.eliminarTipoActivo(id);
+        return ResponseEntity.ok("Tipo de activo eliminado correctamente");
     }
+
 }
