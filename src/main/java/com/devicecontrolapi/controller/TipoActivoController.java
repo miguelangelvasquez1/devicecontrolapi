@@ -54,9 +54,9 @@ public class TipoActivoController {
 
     // Eliminar un tipo de activo por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarTipoActivo(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminarTipoActivo(@PathVariable Integer id) {
         tipoActivoService.eliminarTipoActivo(id);
-        return ResponseEntity.ok("Tipo de activo eliminado correctamente");
+        return ResponseEntity.noContent().build(); // 204 sin body
     }
 
 }
