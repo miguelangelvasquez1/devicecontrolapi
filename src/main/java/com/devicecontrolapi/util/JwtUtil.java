@@ -17,7 +17,7 @@ public class JwtUtil {
 
     // Método para generar el JWT
     public String generateToken(String email, byte rol) {
-        long expirationTime = 1000 * 60 * 60;  // 1 hora de expiración
+        long expirationTime = (1000 * 60 * 60) * 2;  // 2 horas de expiración
 
         return Jwts.builder()
                 .setSubject(email) //El subject será el email

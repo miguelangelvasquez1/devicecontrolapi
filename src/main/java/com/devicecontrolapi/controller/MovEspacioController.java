@@ -3,11 +3,13 @@ package com.devicecontrolapi.controller;
 import com.devicecontrolapi.model.MovEspacio;
 import com.devicecontrolapi.service.MovEspacioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/movespacios")
@@ -15,6 +17,12 @@ public class MovEspacioController {
 
     @Autowired
     private MovEspacioService movEspacioService;
+
+    @PutMapping("/cancelar/{id}")
+    public ResponseEntity<Void> cancelarSolicitud(@PathVariable Integer id) {
+        movEspacioService.cancelarSolicitud(id);
+        return ResponseEntity.noContent().build();
+    }
 
     // Obtener todos los movimientos de espacios
     @GetMapping

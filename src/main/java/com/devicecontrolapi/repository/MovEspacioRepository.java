@@ -25,4 +25,8 @@ public interface MovEspacioRepository extends JpaRepository<MovEspacio, Integer>
     // Buscar movimientos en un rango de fechas
     @Query("SELECT m FROM MovEspacio m WHERE m.fechaPres BETWEEN :fechaInicio AND :fechaFin")
     List<MovEspacio> buscarPorRangoFechas(@Param("fechaInicio") LocalDateTime fechaInicio, @Param("fechaFin") LocalDateTime fechaFin);
+
+    List<MovEspacio> findByEspacioIdespacioAndFechaDevolAfterAndFechaPresBefore(
+        Integer idEspacio, LocalDateTime fechaInicio, LocalDateTime fechaFin);
+
 }

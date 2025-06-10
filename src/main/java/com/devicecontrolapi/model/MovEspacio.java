@@ -28,6 +28,10 @@ public class MovEspacio {
     private Espacio espacio;
 
     @ManyToOne
-    @JoinColumn(name = "idusuario")
+    @JoinColumn(name = "idusuario_soli")
     private Usuario usuario;
-} //probar conexion, subir a git, subir a notion
+
+    @ManyToOne
+    @JoinColumn(name = "idusuario_recep")
+    private Usuario vigilante;
+}

@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.apache.poi:poi:5.2.5'
     implementation 'org.apache.poi:poi-ooxml:5.2.5' //Para excel
     implementation 'com.itextpdf:kernel:8.0.3'
@@ -31,7 +32,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.29'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
-	runtimeOnly 'com.h2database:h2' // Opcional para pruebas en memoria
+	// runtimeOnly 'com.h2database:h2' // Opcional para pruebas en memoria
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

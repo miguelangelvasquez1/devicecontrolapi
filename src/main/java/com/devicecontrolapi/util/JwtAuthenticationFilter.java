@@ -45,16 +45,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
+            // Buscar primero en el header Authorization
+            String jwtToken = null;
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new TokenMissingException(); // Si no hay token o esta mal escrito, etc
+
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                jwtToken = authHeader.substring(7);
             }
 
-            final String jwtToken = authHeader.substring(7);
+            // Si no está en el header, buscarlo como parámetro de URL
+            if (jwtToken == null) {
+                jwtToken = request.getParameter("token");
+            }
+
+            // Si sigue sin token, lanzar excepción personalizada
+            if (jwtToken == null || jwtToken.isBlank()) {
+                throw new TokenMissingException(); // Token no presente
+            }
+
             final String emailSubject = jwtUtil.extractUsername(jwtToken);
 
             if (emailSubject == null || !jwtUtil.validateToken(jwtToken, emailSubject)) {
-                throw new InvalidTokenException(); // Si el token no es válido
+                throw new InvalidTokenException(); // Token inválido
             }
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -68,7 +80,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
             request.setAttribute("exception", e);
             authenticationEntryPoint.commence(request, response,
-                    new org.springframework.security.core.AuthenticationException("Token expirado, haga la renovación eche", e) {
+                    new org.springframework.security.core.AuthenticationException(
+                            "Token expirado, haga la renovación eche", e) {
                     });
         } catch (TokenMissingException | InvalidTokenException e) {
             SecurityContextHolder.clearContext();

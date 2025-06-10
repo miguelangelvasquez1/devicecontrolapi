@@ -4,9 +4,7 @@
 - Mostrar mensaje de que si no llega código de PasswordReset, contactar con soporte (Si no llega posiblemente el correo no existe)
 - Manejar la expiración del token, refresh
 - La ruta de register debe estar protegida, ya puedo crear usuarios con la app en 0 gracias a AdminInitializer
-
-
-
+- Archivo util para getCurrentUser()?
 
 ## Conexión con la base de datos
 
