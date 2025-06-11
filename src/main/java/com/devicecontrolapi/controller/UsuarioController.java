@@ -3,6 +3,8 @@ package com.devicecontrolapi.controller;
 import com.devicecontrolapi.communication.RegisterConfirmation;
 import com.devicecontrolapi.dto.LoginRequest;
 import com.devicecontrolapi.dto.LoginResponseDTO;
+import com.devicecontrolapi.dto.UpdateProfileRequest; // Nuevo DTO
+
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin(origins = "http://localhost:4200") // Permitir CORS para Angular
 public class UsuarioController {
 
     @Autowired
@@ -35,21 +38,34 @@ public class UsuarioController {
         return ResponseEntity.ok(nuevoUsuario);
     }
 
-    // Endpoint para hacer login y obtener el token JWT - Cambiar a clase
-    // loginRequest?
+    // Endpoint para hacer login y obtener el token JWT
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         LoginResponseDTO response = usuarioService.loginAndGenerateToken(
                 loginRequest.getEmail(), loginRequest.getClave());
 
         if (response != null) {
-            // Si el login es exitoso, enviar el DTO con el token
             return ResponseEntity.ok(response);
         } else {
-            // Si las credenciales son incorrectas
             return ResponseEntity.status(401).body("Credenciales incorrectas");
         }
     }
+
+    // NUEVO: Endpoint para actualizar perfil del usuario
+    @PutMapping("/perfil/{id}")
+    public ResponseEntity<?> actualizarPerfil(@PathVariable("id") Integer id, @RequestBody UpdateProfileRequest updateRequest) {
+        try {
+            Usuario usuarioActualizado = usuarioService.actualizarPerfil(id, updateRequest);
+            if (usuarioActualizado != null) {
+                return ResponseEntity.ok(usuarioActualizado);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar el perfil: " + e.getMessage());
+        }
+    }  
 
     // Obtener todos los usuarios
     @GetMapping
@@ -57,10 +73,9 @@ public class UsuarioController {
         return usuarioService.obtenerTodosLosUsuarios();
     }
 
-    // Obtener un usuario por su id, OPCIONAL?
-    @GetMapping("/getById/{id:\\d+}") // @GetMapping("/{id:\\d+}"), Evita conflicto con "/login" asegurando que ID
-                                      // solo acepte números
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Integer id) {
+    // Obtener un usuario por su id
+    @GetMapping("/getById/{id:\\d+}")
+    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable("id") Integer id) {
         Optional<Usuario> usuario = usuarioService.obtenerUsuarioPorId(id);
         return usuario.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

@@ -1,6 +1,7 @@
 package com.devicecontrolapi.service;
 
 import com.devicecontrolapi.dto.LoginResponseDTO;
+import com.devicecontrolapi.dto.UpdateProfileRequest;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.repository.UsuarioRepository;
 import com.devicecontrolapi.util.JwtUtil;
@@ -64,6 +65,35 @@ public class UsuarioService {
             return null; // o lanza una excepción adecuada
         }
     }
+
+    // NUEVO: Método para actualizar perfil
+    public Usuario actualizarPerfil(Integer id, UpdateProfileRequest updateRequest) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            
+            // Actualizar solo los campos permitidos
+            if (updateRequest.getNombre() != null && !updateRequest.getNombre().trim().isEmpty()) {
+                usuario.setNombre(updateRequest.getNombre().trim());
+            }
+            
+            if (updateRequest.getTelefono() != null && !updateRequest.getTelefono().trim().isEmpty()) {
+                // Convertir el teléfono a Long si es necesario
+                try {
+                    Long telefono = Long.parseLong(updateRequest.getTelefono().trim());
+                    usuario.setTelefono(telefono.toString());
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("El teléfono debe ser un número válido");
+                }
+            }
+            
+            return usuarioRepository.save(usuario);
+        }
+        
+        return null;
+    }
+
 
     public boolean existsByEmail(String email) {
         return usuarioRepository.existsByEmail(email);
