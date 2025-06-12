@@ -18,7 +18,6 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/api/movEspacios")
 @RequiredArgsConstructor
 @Tag(name = "Solicitudes de Espacio", description = "Gestión de solicitudes de espacios")
-@CrossOrigin(origins = "*")
 public class SolicitudEspacioController {
 
     private final SolicitudEspacioService solicitudEspacioService;

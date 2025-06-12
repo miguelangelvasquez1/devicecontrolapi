@@ -37,9 +37,10 @@ public class PasswordResetController {
     private PasswordResetSender passwordResetSender; // Llama a tu Azure Function
 
     @PostMapping("/forgot-password") // Enviar email para restablecer contraseña
-    public ResponseEntity<?> forgotPassword(@RequestBody String email) {
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> email) {
 
-        Usuario user = usuarioRepository.findByEmail(email);
+        String emailValue = email.get("email");
+        Usuario user = usuarioRepository.findByEmail(emailValue);
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -49,10 +50,10 @@ public class PasswordResetController {
 
         String username = user.getNombre();
 
-        String code = passwordResetService.generateResetCode(email);
+        String code = passwordResetService.generateResetCode(emailValue);
 
         // Enviar correo usando Azure Function
-        passwordResetSender.sendResetCode(email, username, code); // Esto puede no enviarse, mostrar mensaje en el front
+        passwordResetSender.sendResetCode(emailValue, username, code); // Esto puede no enviarse, mostrar mensaje en el front
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +69,6 @@ public class PasswordResetController {
         if (!valid)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Código inválido o expirado");
 
-        // Eliminar token?
         return ResponseEntity.ok("Código válido, procede a restablecer tu contraseña.");
     }
 

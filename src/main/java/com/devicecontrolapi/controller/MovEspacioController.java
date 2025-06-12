@@ -50,7 +50,7 @@ public class MovEspacioController {
 
     // Buscar movimientos por usuario
     @GetMapping("/buscarPorUsuario/{idUsuario}")
-    public List<MovEspacio> buscarPorUsuario(@PathVariable Integer idUsuario) {
+    public List<MovEspacio> buscarPorUsuario(@PathVariable("idUsuario") Integer idUsuario) {
         return movEspacioService.buscarPorUsuario(idUsuario);
     }
 
