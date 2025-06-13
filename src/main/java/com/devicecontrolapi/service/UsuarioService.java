@@ -5,6 +5,8 @@ import com.devicecontrolapi.dto.UpdateProfileRequest;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.repository.UsuarioRepository;
 import com.devicecontrolapi.util.JwtUtil;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,7 +55,7 @@ public class UsuarioService {
 
             // Crear respuesta
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
-            loginResponseDTO.setIdusuario(usuario.getIdusuario());  
+            loginResponseDTO.setIdusuario(usuario.getIdusuario());
             loginResponseDTO.setToken(token);
             loginResponseDTO.setNombre(usuario.getNombre());
             loginResponseDTO.setEmail(usuario.getEmail());
@@ -69,15 +71,15 @@ public class UsuarioService {
     // NUEVO: Método para actualizar perfil
     public Usuario actualizarPerfil(Integer id, UpdateProfileRequest updateRequest) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
-        
+
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
-            
+
             // Actualizar solo los campos permitidos
             if (updateRequest.getNombre() != null && !updateRequest.getNombre().trim().isEmpty()) {
                 usuario.setNombre(updateRequest.getNombre().trim());
             }
-            
+
             if (updateRequest.getTelefono() != null && !updateRequest.getTelefono().trim().isEmpty()) {
                 // Convertir el teléfono a Long si es necesario
                 try {
@@ -87,13 +89,20 @@ public class UsuarioService {
                     throw new IllegalArgumentException("El teléfono debe ser un número válido");
                 }
             }
-            
+
             return usuarioRepository.save(usuario);
         }
-        
+
         return null;
     }
 
+    public void actualizarRol(Integer id, Byte nuevoRol) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con id " + id));
+
+        usuario.setRol(nuevoRol);
+        usuarioRepository.save(usuario);
+    }
 
     public boolean existsByEmail(String email) {
         return usuarioRepository.existsByEmail(email);

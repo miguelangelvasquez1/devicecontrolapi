@@ -4,7 +4,7 @@ import com.devicecontrolapi.communication.RegisterConfirmation;
 import com.devicecontrolapi.dto.LoginRequest;
 import com.devicecontrolapi.dto.LoginResponseDTO;
 import com.devicecontrolapi.dto.UpdateProfileRequest; // Nuevo DTO
-
+import com.devicecontrolapi.dto.UsuarioRolUpdate;
 import com.devicecontrolapi.model.Usuario;
 import com.devicecontrolapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -53,7 +54,8 @@ public class UsuarioController {
 
     // NUEVO: Endpoint para actualizar perfil del usuario
     @PutMapping("/perfil/{id}")
-    public ResponseEntity<?> actualizarPerfil(@PathVariable("id") Integer id, @RequestBody UpdateProfileRequest updateRequest) {
+    public ResponseEntity<?> actualizarPerfil(@PathVariable("id") Integer id,
+            @RequestBody UpdateProfileRequest updateRequest) {
         try {
             Usuario usuarioActualizado = usuarioService.actualizarPerfil(id, updateRequest);
             if (usuarioActualizado != null) {
@@ -65,7 +67,17 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al actualizar el perfil: " + e.getMessage());
         }
-    }  
+    }
+
+    @PutMapping("/rolUpdate/{id}")
+    public ResponseEntity<?> actualizarRolUsuario(@PathVariable Integer id, @RequestBody UsuarioRolUpdate request) {
+        if (request.getRol() == null) {
+            return ResponseEntity.badRequest().body("El rol no puede ser nulo");
+        }
+
+        usuarioService.actualizarRol(id, request.getRol());
+        return ResponseEntity.noContent().build();
+    }
 
     // Obtener todos los usuarios
     @GetMapping
