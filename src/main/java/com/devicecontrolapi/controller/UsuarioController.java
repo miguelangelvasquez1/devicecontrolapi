@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -70,7 +69,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/rolUpdate/{id}")
-    public ResponseEntity<?> actualizarRolUsuario(@PathVariable Integer id, @RequestBody UsuarioRolUpdate request) {
+    public ResponseEntity<?> actualizarRolUsuario(@PathVariable("id") Integer id, @RequestBody UsuarioRolUpdate request) {
         if (request.getRol() == null) {
             return ResponseEntity.badRequest().body("El rol no puede ser nulo");
         }
@@ -120,7 +119,7 @@ public class UsuarioController {
 
     // Eliminar un usuario por id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable("id") Integer id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }

@@ -19,7 +19,7 @@ public class MovEspacioController {
     private MovEspacioService movEspacioService;
 
     @PutMapping("/cancelar/{id}")
-    public ResponseEntity<Void> cancelarSolicitud(@PathVariable Integer id) {
+    public ResponseEntity<Void> cancelarSolicitud(@PathVariable("id") Integer id) {
         movEspacioService.cancelarSolicitud(id);
         return ResponseEntity.noContent().build();
     }

@@ -93,7 +93,7 @@ public class MovEspacioService {
             throw new IllegalStateException("Solo se pueden cancelar solicitudes pendientes");
         }
 
-        solicitud.setEstado("Cancelado");
+        solicitud.setEstado("Cancelada");
         MovEspacio saved = movEspacioRepository.save(solicitud);
 
         // Publicar evento para crear notificación
