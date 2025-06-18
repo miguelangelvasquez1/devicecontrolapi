@@ -15,7 +15,7 @@ public class Activo {
     private String nombre;
     private String url;
     private String serial;
-    private char estado;
+    private String estado;
     private String observaciones; //Se añade despues de la version 1.0.0
 
     @ManyToOne

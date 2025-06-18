@@ -16,7 +16,7 @@ public class MovActivo {
     private Integer idmov;
     private Date fecha;  //Poner fechaDevol?
     private String descrimov;
-    private char estado;
+    private String estado;
 
     @ManyToOne
     @JoinColumn(name = "idactivo")
