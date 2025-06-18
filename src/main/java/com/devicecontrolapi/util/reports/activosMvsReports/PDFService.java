@@ -19,7 +19,7 @@ import com.itextpdf.layout.properties.UnitValue;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+@Service("activosMvsService")
 @Slf4j
 public class PDFService {
     
