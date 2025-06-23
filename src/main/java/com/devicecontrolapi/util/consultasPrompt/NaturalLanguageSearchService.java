@@ -106,8 +106,11 @@ public class NaturalLanguageSearchService {
             3. Limita los resultados a 100 registros máximo
             4. No uses DELETE, UPDATE, INSERT, DROP o ALTER
             5. Solo consultas SELECT
+            6. No devuelvas el campo clave de la tabla usuarios
+            7. Si el el prompt del usuarios no tiene que ver con la base de datos responde "false"
             
             SQL:
+            No devuelvas el campo clave de la tabla usuarios
             """.formatted(dbSchema, userPrompt);
     }
     
