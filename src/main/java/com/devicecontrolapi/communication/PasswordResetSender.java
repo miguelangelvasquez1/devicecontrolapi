@@ -37,7 +37,7 @@ public class PasswordResetSender {
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
-        String azureFunctionUrl = "https://function-192-adso.azurewebsites.net/api/httptrigger1";
+        String azureFunctionUrl = "https://funcion-device.azurewebsites.net/api/httptrigger1";
         restTemplate.postForEntity(azureFunctionUrl, request, String.class);
     }
 }

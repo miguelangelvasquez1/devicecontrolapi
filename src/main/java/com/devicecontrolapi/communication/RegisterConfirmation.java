@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegisterConfirmation {
 
-    private static final String SERVICE_URL = "https://function-192-adso.azurewebsites.net/api/httptrigger1";
+    private static final String SERVICE_URL = "https://funcion-device.azurewebsites.net/api/httptrigger1";
 
     @Async
     public void realizarLlamadaHttp(String email, String nombre, String rol) {
