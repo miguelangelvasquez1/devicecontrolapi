@@ -1,6 +1,7 @@
 package com.devicecontrolapi.controller;
 
 import com.devicecontrolapi.communication.RegisterConfirmation;
+import com.devicecontrolapi.dto.CambioContrasenaDTO;
 import com.devicecontrolapi.dto.LoginRequest;
 import com.devicecontrolapi.dto.LoginResponseDTO;
 import com.devicecontrolapi.dto.UpdateProfileRequest; // Nuevo DTO
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,4 +125,16 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
+
+     @PostMapping("/cambiar-contrasena/{id}")
+public ResponseEntity<?> cambiarContrasena(@PathVariable Integer id, @RequestBody CambioContrasenaDTO dto) {
+    try {
+        usuarioService.cambiarContrasena(id, dto);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Contraseña actualizada correctamente"));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError().body(Collections.singletonMap("message", "Error al cambiar la contraseña"));
+    }
+}
 }

@@ -1,5 +1,6 @@
 package com.devicecontrolapi.service;
 
+import com.devicecontrolapi.dto.CambioContrasenaDTO;
 import com.devicecontrolapi.dto.LoginResponseDTO;
 import com.devicecontrolapi.dto.UpdateProfileRequest;
 import com.devicecontrolapi.model.Usuario;
@@ -94,6 +95,18 @@ public class UsuarioService {
         }
 
         return null;
+    }
+
+      public void cambiarContrasena(Integer idUsuario, CambioContrasenaDTO dto) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), usuario.getClave())) {
+            throw new IllegalArgumentException("La contraseña actual es incorrecta");
+        }
+
+        usuario.setClave(passwordEncoder.encode(dto.getNewPassword()));
+        usuarioRepository.save(usuario);
     }
 
     public void actualizarRol(Integer id, Byte nuevoRol) {
