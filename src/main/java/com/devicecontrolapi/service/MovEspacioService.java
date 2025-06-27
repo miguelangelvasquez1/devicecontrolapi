@@ -46,7 +46,7 @@ public class MovEspacioService {
 
     // método aprobarSolicitud
     @Transactional
-    public MovEspacio aprobarSolicitud(Integer id, String observaciones) {
+    public MovEspacio aprobarSolicitud(Integer id) {
         MovEspacio solicitud = movEspacioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada con ID: " + id));
 
@@ -54,7 +54,7 @@ public class MovEspacioService {
             throw new IllegalStateException("Solo se pueden aprobar solicitudes pendientes");
         }
 
-        solicitud.setEstado("Aprobado");
+        solicitud.setEstado("Aprobada");
         MovEspacio saved = movEspacioRepository.save(solicitud);
 
         // Publicar evento para crear notificación
@@ -66,7 +66,7 @@ public class MovEspacioService {
 
     // método rechazarSolicitud
     @Transactional
-    public MovEspacio rechazarSolicitud(Integer id, String motivo) {
+    public MovEspacio rechazarSolicitud(Integer id) {
         MovEspacio solicitud = movEspacioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada con ID: " + id));
 
@@ -74,7 +74,7 @@ public class MovEspacioService {
             throw new IllegalStateException("Solo se pueden rechazar solicitudes pendientes");
         }
 
-        solicitud.setEstado("Rechazado");
+        solicitud.setEstado("Rechazada");
         MovEspacio saved = movEspacioRepository.save(solicitud);
 
         // Publicar evento para crear notificación

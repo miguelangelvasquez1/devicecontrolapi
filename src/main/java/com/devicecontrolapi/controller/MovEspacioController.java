@@ -3,6 +3,7 @@ package com.devicecontrolapi.controller;
 import com.devicecontrolapi.model.MovEspacio;
 import com.devicecontrolapi.service.MovEspacioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,13 +11,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping("/movespacios")
 public class MovEspacioController {
 
     @Autowired
     private MovEspacioService movEspacioService;
+
+    @PutMapping("/aprobarSol/{id:\\d+}")
+    public ResponseEntity<?> aprobarSolicitud(@PathVariable Integer id) {
+        try {
+            movEspacioService.aprobarSolicitud(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            // Esto evita que devuelva un HTML feo
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error inesperado en el servidor: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/rechazar/{id:\\d+}")
+    public ResponseEntity<Void> rechazarSolicitud(@PathVariable("id") Integer id) {
+        movEspacioService.rechazarSolicitud(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @PutMapping("/cancelar/{id}")
     public ResponseEntity<Void> cancelarSolicitud(@PathVariable("id") Integer id) {
@@ -56,7 +74,8 @@ public class MovEspacioController {
 
     // Buscar movimientos en un rango de fechas
     @GetMapping("/buscarPorRangoFechas")
-    public List<MovEspacio> buscarPorRangoFechas(@RequestParam LocalDateTime fechaInicio, @RequestParam LocalDateTime fechaFin) {
+    public List<MovEspacio> buscarPorRangoFechas(@RequestParam LocalDateTime fechaInicio,
+            @RequestParam LocalDateTime fechaFin) {
         return movEspacioService.buscarPorRangoFechas(fechaInicio, fechaFin);
     }
 
