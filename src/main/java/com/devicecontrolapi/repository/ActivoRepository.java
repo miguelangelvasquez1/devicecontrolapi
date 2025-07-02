@@ -16,6 +16,8 @@ public interface ActivoRepository extends JpaRepository<Activo, Integer> {
 
     // List<Activo> findAll(); //Redundante?, solo definirlo en service y controller
 
+    boolean existsBySerial(String serial);
+
     // Contar activos por tipo usando JPQL
     @Query("SELECT COUNT(a) FROM Activo a WHERE a.tipoActivo.id = :idTipoActivo")
     long countActivosPorTipo(@Param("idTipoActivo") Integer idTipoActivo);

@@ -1,7 +1,11 @@
 package com.devicecontrolapi.service;
 
+import com.devicecontrolapi.exceptions.DuplicateSerialException;
 import com.devicecontrolapi.model.Activo;
 import com.devicecontrolapi.repository.ActivoRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,17 +40,34 @@ public class ActivoService {
 
     // Método para agregar un activo
     public Activo agregarActivo(Activo activo) {
+
+        if (!isSerialAvailable(activo.getSerial())) {
+            throw new DuplicateSerialException();
+        }
+
         return activoRepository.save(activo);
     }
 
-    // Método para actualizar un activo, o hacer consulta de MYSQL
+    // Método para actualizar un activo
     public Activo actualizarActivo(Integer id, Activo activoActualizado) {
+
+        // Buscar el activo existente
         Optional<Activo> activoExistente = activoRepository.findById(id);
 
         if (activoExistente.isPresent()) {
+
             Activo activo = activoExistente.get();
 
-            // Actualizar todos los campos relevantes
+            // Verificar si el serial ha cambiado
+            if (!activoActualizado.getSerial().equals(activo.getSerial())) {
+
+                // Si el serial ha cambiado, verificar si el nuevo serial ya está en uso
+                if (!isSerialAvailable(activoActualizado.getSerial())) {
+                    throw new DuplicateSerialException();
+                }
+            }
+
+            // Actualizar los campos del activo
             activo.setNombre(activoActualizado.getNombre());
             activo.setEstado(activoActualizado.getEstado());
             activo.setTipoActivo(activoActualizado.getTipoActivo());
@@ -55,10 +76,13 @@ public class ActivoService {
             activo.setSerial(activoActualizado.getSerial());
             activo.setObservaciones(activoActualizado.getObservaciones());
 
+            // Guardar el activo actualizado
             return activoRepository.save(activo);
+
         } else {
-            // Puedes lanzar una excepción personalizada si prefieres
-            return null;
+            // Si el activo no existe, podrías lanzar una excepción o devolver un valor
+            // apropiado
+            throw new EntityNotFoundException("Activo no encontrado con ID: " + id);
         }
     }
 
@@ -72,4 +96,9 @@ public class ActivoService {
             return false; // O lanzar una excepción si no se encuentra el activo
         }
     }
+
+    public boolean isSerialAvailable(String serial) {
+        return !activoRepository.existsBySerial(serial);
+    }
+
 }
