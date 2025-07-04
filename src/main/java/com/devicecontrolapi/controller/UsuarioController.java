@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "http://localhost:4200") // Permitir CORS para Angular
 public class UsuarioController {
 
     @Autowired
